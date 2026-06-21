@@ -15,6 +15,15 @@
 <body>
 <div class="container">
     <h1 class="text-center mb-5">Preguntas Frecuentes de la Comunidad</h1>
+    
+    <div class="card p-4 mb-5" style="background: rgba(255, 255, 255, 0.1); border-radius: 15px; border: none;">
+        <h4 class="text-white">¿Tienes alguna pregunta?</h4>
+        <form action="/enviar" method="POST">
+            <input type="text" name="pregunta" class="form-control mb-2" placeholder="Escribe aquí tu duda..." required>
+            <button type="submit" class="btn btn-light">Enviar Pregunta</button>
+        </form>
+    </div>
+
     {% for p in preguntas %}
     <div class="faq-card" onclick="toggleRespuesta(this)">
         <div class="pregunta">#{{ loop.index }} - {{ p[1] }}</div>
