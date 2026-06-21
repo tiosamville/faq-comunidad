@@ -5,12 +5,8 @@ from difflib import SequenceMatcher
 
 app = Flask(__name__)
 
-# Configuración para que la base de datos siempre se encuentre en la carpeta del proyecto
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DB_PATH = os.path.join(BASE_DIR, 'base_preguntas.db')
-
-def es_similar(a, b):
-    return SequenceMatcher(None, a.lower(), b.lower()).ratio() > 0.6
+# En Render, el único lugar donde siempre se tiene permiso de escritura es /tmp
+DB_PATH = '/tmp/base_preguntas.db'
 
 def get_db():
     conn = sqlite3.connect(DB_PATH)
@@ -23,7 +19,7 @@ def init_db():
                     (id INTEGER PRIMARY KEY, pregunta TEXT, respuesta TEXT, estado TEXT)''')
     conn.commit()
     conn.close()
-
+    
 @app.route('/')
 def index():
     conn = get_db()
