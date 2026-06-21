@@ -17,21 +17,10 @@
     <h1 class="text-center mb-5">Preguntas Frecuentes de la Comunidad</h1>
     {% for p in preguntas %}
     <div class="faq-card" onclick="toggleRespuesta(this)">
-        <div class="pregunta">#{{ loop.index }} - {{ p.pregunta }}</div>
-        <div class="respuesta">{{ p.respuesta }}</div>
+        <div class="pregunta">#{{ loop.index }} - {{ p[1] }}</div>
+        <div class="respuesta">{{ p[2] }}</div>
     </div>
     {% endfor %}
-</div>
-<div class="container mt-5">
-    <div class="card p-4 mb-5" style="background: rgba(255,255,255,0.1); color: white;">
-        <h3>¿Tienes alguna duda?</h3>
-        <form action="/enviar" method="POST">
-            <div class="mb-3">
-                <input type="text" name="pregunta" class="form-control" placeholder="Escribe tu pregunta aquí..." required>
-            </div>
-            <button type="submit" class="btn btn-primary">Enviar Pregunta</button>
-        </form>
-    </div>
 </div>
 <script>
     function toggleRespuesta(elemento) {
