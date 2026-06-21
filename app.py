@@ -9,8 +9,8 @@ app = Flask(__name__)
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
 def get_db():
-    # Se agrega connect_timeout para evitar que la red se bloquee en Render
-    return psycopg2.connect(DATABASE_URL, sslmode='require', connect_timeout=10)
+    # Eliminamos sslmode='require' porque el puerto 6543 no lo necesita de esta forma
+    return psycopg2.connect(DATABASE_URL, connect_timeout=10)
 
 def check_auth(username, password):
     secret_user = os.environ.get('ADMIN_USER_NEW', 'admin')
