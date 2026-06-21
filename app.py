@@ -13,8 +13,8 @@ DB_PATH = '/tmp/base_preguntas.db'
 def check_auth(username, password):
     # Esto busca el usuario y contraseña en la configuración de Render
     # Si no los encuentra, usará 'invitado' (por seguridad)
-    secret_user = os.environ.get('ADMIN_USER', 'invitado')
-    secret_pass = os.environ.get('ADMIN_PASS', 'incorrecto')
+    secret_user = os.environ.get('ADMIN_USER_NEW', 'invitado')
+    secret_pass = os.environ.get('ADMIN_PASS_NEW', 'incorrecto')
     return username == secret_user and password == secret_pass
 # -------------------------
 
