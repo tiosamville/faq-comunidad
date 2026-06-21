@@ -1,23 +1,17 @@
 import os
 import psycopg2
-import socket
 from flask import Flask, render_template, request, redirect, Response
 from functools import wraps
 from difflib import SequenceMatcher
 
 app = Flask(__name__)
 
+# Usamos la variable de entorno que ya configuramos en Render
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
 def get_db():
-    # Mantenemos la lógica de forzar IPv4 para saltar el error de red
-    host = "db.uksyepriizqtrkzaasdr.supabase.co"
-    try:
-        ip_address = socket.gethostbyname(host)
-        dsn = DATABASE_URL.replace(host, ip_address)
-    except:
-        dsn = DATABASE_URL
-    return psycopg2.connect(dsn, connect_timeout=10)
+    # Conexión estándar que ya probamos que funciona con tu configuración actual
+    return psycopg2.connect(DATABASE_URL, connect_timeout=10)
 
 def check_auth(username, password):
     secret_user = os.environ.get('ADMIN_USER_NEW', 'admin')
@@ -46,7 +40,7 @@ def index():
     conn.close()
     return render_template('index.html', preguntas=preguntas)
 
-# ESTA ES LA FUNCIÓN QUE FALTABA
+# ESTA ES LA FUNCIÓN DE ENVÍO QUE RECUPERAMOS
 @app.route('/enviar', methods=['POST'])
 def enviar():
     pregunta_nueva = request.form['pregunta']
