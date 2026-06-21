@@ -11,12 +11,10 @@ DB_PATH = '/tmp/base_preguntas.db'
 
 # --- SEGURIDAD PRIVADA ---
 def check_auth(username, password):
-    # Esto busca el usuario y contraseña en la configuración de Render
-    # Si no los encuentra, usará 'invitado' (por seguridad)
-    secret_user = os.environ.get('ADMIN_USER_NEW', 'invitado')
-    secret_pass = os.environ.get('ADMIN_PASS_NEW', 'incorrecto')
+    # Lee las credenciales desde las variables de entorno de Render
+    secret_user = os.environ.get('ADMIN_USER_NEW', 'usuario_por_defecto')
+    secret_pass = os.environ.get('ADMIN_PASS_NEW', 'password_por_defecto')
     return username == secret_user and password == secret_pass
-# -------------------------
 
 def authenticate():
     return Response('Acceso denegado', 401, {'WWW-Authenticate': 'Basic realm="Login Required"'})
@@ -29,7 +27,7 @@ def requires_auth(f):
             return authenticate()
         return f(*args, **kwargs)
     return decorated
-# ----------------------------------
+# -------------------------
 
 def es_similar(a, b):
     return SequenceMatcher(None, a.lower(), b.lower()).ratio() > 0.6
@@ -70,8 +68,8 @@ def enviar():
     conn.close()
     return redirect('/')
 
-# RUTAS PROTEGIDAS CON @requires_auth
-@app.route('/admin')
+# --- RUTA PRIVADA (CAMBIADA PARA MAYOR SEGURIDAD) ---
+@app.route('/gestion_privada_2026')
 @requires_auth
 def admin():
     conn = get_db()
@@ -87,7 +85,7 @@ def actualizar(id):
     conn.execute('UPDATE preguntas SET respuesta = ?, estado = "publicada" WHERE id = ?', (nueva_respuesta, id))
     conn.commit()
     conn.close()
-    return redirect('/admin')
+    return redirect('/gestion_privada_2026')
     
 @app.route('/responder/<int:id>', methods=['POST'])
 @requires_auth
@@ -97,7 +95,7 @@ def responder(id):
     conn.execute('UPDATE preguntas SET respuesta = ?, estado = "publicada" WHERE id = ?', (respuesta, id))
     conn.commit()
     conn.close()
-    return redirect('/admin')
+    return redirect('/gestion_privada_2026')
 
 @app.route('/eliminar/<int:id>')
 @requires_auth
@@ -106,7 +104,7 @@ def eliminar(id):
     conn.execute('DELETE FROM preguntas WHERE id = ?', (id,))
     conn.commit()
     conn.close()
-    return redirect('/admin')
+    return redirect('/gestion_privada_2026')
 
 if __name__ == '__main__':
     app.run(debug=False)
